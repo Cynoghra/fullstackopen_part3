@@ -1,5 +1,21 @@
 const express = require('express')
+const morgan = require('morgan')
+
 const app = express()
+
+app.use(express.json())
+
+morgan.token('body', (req) => {
+  if (req.method === 'POST') {
+    return JSON.stringify(req.body)
+  }
+
+  // palautetaan tyhjä merkkijono, jos pyyntö ei ole POST
+  return ''
+})
+
+//app.use(morgan('tiny')) poistettu käytöstä tehtävää 3.8 varten
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 
 const persons = [
   {
@@ -29,8 +45,6 @@ const info = () => {
   const date = new Date()
   return `Phonebook has info for ${persons.length} people <br><br>${date}`
 }
-
-app.use(express.json())
 
 app.get('/api/persons', (request, response) => {
   response.json(persons)
