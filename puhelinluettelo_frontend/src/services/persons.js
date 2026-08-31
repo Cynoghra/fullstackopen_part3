@@ -1,6 +1,7 @@
 import axios from 'axios'
 
-const baseUrl = 'http://localhost:3001/persons'
+// muutettu tehtävää 3.9 varten backendiin yhdistykseen
+const baseUrl = '/api/persons' // poistettiin localhost renderiä varten
 
 const getAll = () => {
   return axios.get(baseUrl)
