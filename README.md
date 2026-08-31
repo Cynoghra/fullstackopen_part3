@@ -1,6 +1,8 @@
 # Full Stack Open - Part 3
 
-Puhelinluettelo - frontend&backend
+Puhelinluettelo - backend
+
+Frontend_osio - tuotantoversion rakennusta varten
 
 Vain backend on deployattu Renderiin. Frontendin tuotantoversio (dist) on siirretty backendin kansioon, josta backend palvelee sen Renderissä.
 
