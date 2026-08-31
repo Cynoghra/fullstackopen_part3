@@ -10,7 +10,7 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-dist
+/puhelinluettelo_frontend/dist
 dist-ssr
 *.local
 

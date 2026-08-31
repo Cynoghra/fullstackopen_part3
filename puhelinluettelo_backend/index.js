@@ -4,6 +4,7 @@ const cors = require('cors')
 const app = express()
 const PORT = process.env.PORT || 3001 //renderiä varten 3.10
 
+app.use(express.json())
 app.use(express.static('dist')) // 3.10 tehtävä
 app.use(cors())
 
