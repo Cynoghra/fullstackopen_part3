@@ -103,8 +103,8 @@ const App = () => {
           setNewNumber('')
         })
         .catch(error => {
-          setErrorMessage(`Failed to add ${newName}`)
-
+          // 3.19 frontend muutos
+          setErrorMessage(error.response.data.error)
           setTimeout(() => {
             setErrorMessage(null)
           }, 5000)

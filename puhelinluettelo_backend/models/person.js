@@ -13,13 +13,23 @@ mongoose.connect(url, { family: 4 })
         console.log('error connecting to MongoDB:', error.message);
     });
 
+// 3.19 muutos
 const personSchema = new mongoose.Schema({
     name: {
         type: String,
+        minlength: 3,
         required: true
     },
     number: {
         type: String,
+        minlength: 8,
+        // 3.20 validointi
+        validate: {
+            validator: function(v) {
+                return /^\d{2,3}-\d+$/.test(v);
+            },
+            message: props => `${props.value} is not a valid phone number!`
+        },
         required: true
     }
 });
