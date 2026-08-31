@@ -1,6 +1,8 @@
+require('dotenv').config() // 3.13
 const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
+const Person = require('./models/person') // 3.13
 const app = express()
 const PORT = process.env.PORT || 3001 //renderiä varten 3.10
 
@@ -20,7 +22,8 @@ morgan.token('body', (req) => {
 //app.use(morgan('tiny')) poistettu käytöstä tehtävää 3.8 varten
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 
-const persons = [
+// ei tarvita enää, koska tietokanta on käytössä
+/*const persons = [
   {
     id: "1",
     name: "Arto Hellas",
@@ -41,16 +44,20 @@ const persons = [
     name: "Mary Poppendieck",
     number: "39-23-6423122"
   }
-]
+]*/
 
 // 3.2 tehtävä
 const info = () => {
   const date = new Date()
-  return `Phonebook has info for ${persons.length} people <br><br>${date}`
+  return Person.countDocuments({}).then(count => {
+    return `Phonebook has info for ${count} people <br><br>${date}`
+  })
 }
 
 app.get('/api/persons', (request, response) => {
+  Person.find({}).then(persons => {
   response.json(persons)
+  })
 })
 
 app.get('/info', (request, response) => {
@@ -82,22 +89,22 @@ app.delete('/api/persons/:id', (request, response) => {
   }
 })
 
-// 3.5 ja 3.6 tehtävä
+// 3.5 ja 3.6 tehtävä, muutoksia tietokannan lisäämisen jälkeen
 app.post('/api/persons', (request, response) => {
-  const { name, number } = request.body
+  const body = request.body
 
-  if (!name || !number) {
+  if (!body.name || !body.number) {
     return response.status(400).json({ error: 'name or number is missing' })
   }
 
-  if (persons.some(person => person.name === name)) {
-    return response.status(400).json({ error: 'name must be unique' })
-  }
+  const person = new Person({
+    name: body.name,
+    number: body.number
+  })
 
-  const id = Math.floor(Math.random() * 1000000).toString()
-  const newPerson = { id, name, number }
-  persons.push(newPerson)
-  response.status(201).json(newPerson)
+  person.save().then(savedPerson => {
+    response.status(201).json(savedPerson)
+  })
 })
 
 app.listen(PORT, () => {
